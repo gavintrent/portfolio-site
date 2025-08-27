@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@layer base {
+  html, body {
+    @apply bg-terminal-bg text-terminal-text font-mono;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  * {
+    @apply selection:bg-terminal-selection-bg selection:text-terminal-selection-text;
+  }
+}
+
+@layer components {
+  .terminal-line {
+    @apply mb-2;
+  }
+  
+  .command-prompt {
+    @apply text-terminal-text-bright;
+  }
+  
+  .command-output {
+    @apply text-terminal-text-dim;
+  }
+  
+  .cursor-blink {
+    animation: cursor-blink 1s infinite;
+  }
+  
+  @keyframes cursor-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+}
