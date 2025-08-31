@@ -2,10 +2,10 @@ import type { Metadata, Viewport } from 'next';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'Terminal Portfolio',
-  description: 'A retro terminal-style personal portfolio website',
-  keywords: ['portfolio', 'developer', 'terminal', 'web development'],
-  authors: [{ name: 'Your Name' }],
+  title: 'Adventure Terminal',
+  description: 'A choose your own adventure game with terminal navigation',
+  keywords: ['adventure', 'game', 'terminal', 'choose your own adventure', 'pixel art'],
+  authors: [{ name: 'Gavin Trent' }],
 };
 
 export const viewport: Viewport = {

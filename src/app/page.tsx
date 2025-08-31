@@ -1,5 +1,5 @@
-import { Terminal } from '@/components/Terminal';
+import { SceneManager } from '@/components/SceneManager';
 
 export default function Home() {
-  return <Terminal />;
+  return <SceneManager />;
 }

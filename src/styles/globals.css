@@ -4,36 +4,56 @@
 
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
+@font-face {
+  font-family: 'Minecraftia';
+  src: url('/fonts/Minecraftia-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer base {
   html, body {
-    @apply bg-terminal-bg text-terminal-text font-mono;
+    @apply bg-black text-white font-mono;
     font-family: 'JetBrains Mono', monospace;
   }
   
   * {
-    @apply selection:bg-terminal-selection-bg selection:text-terminal-selection-text;
+    @apply selection:bg-green-400 selection:text-black;
   }
 }
 
 @layer components {
-  .terminal-line {
-    @apply mb-2;
+  .adventure-prompt {
+    @apply text-green-400 text-xl font-mono;
   }
   
-  .command-prompt {
-    @apply text-terminal-text-bright;
+  .adventure-button {
+    @apply bg-green-400 text-black font-mono px-6 py-3 rounded-lg border-2 border-green-300 hover:bg-green-300 hover:border-green-200 transition-all duration-200 transform hover:scale-105 shadow-lg;
   }
   
-  .command-output {
-    @apply text-terminal-text-dim;
+  .adventure-overlay {
+    @apply bg-black/80 border-2 border-green-400 rounded-lg p-6;
   }
   
-  .cursor-blink {
-    animation: cursor-blink 1s infinite;
+  .slow-pulse {
+    animation: slow-pulse 3s ease-in-out infinite;
   }
   
-  @keyframes cursor-blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+  .minecraft-text {
+    font-family: 'Minecraftia', monospace;
+  }
+  
+  .game-over-pulse {
+    animation: game-over-pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes slow-pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  
+  @keyframes game-over-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
   }
 }
