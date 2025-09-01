@@ -11,6 +11,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'UnifontExMono';
+  src: url('/fonts/Unifontexmono-2vrqo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer base {
   html, body {
     @apply bg-black text-white font-mono;
@@ -56,4 +63,13 @@
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
   }
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;             /* Safari and Chrome */
 }

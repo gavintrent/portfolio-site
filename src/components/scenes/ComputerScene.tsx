@@ -59,7 +59,7 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
   return (
     <>
       {/* Background image for computer desktop */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 justify-center items-center">
         <Image
           src="/pixel-art/"
           alt="Computer scene"
@@ -73,8 +73,7 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
       {/* Computer Scene Content */}
       <div className="relative z-10 flex flex-col h-full">
 
-        {/* Intro Text - only visible before terminal */}
-        
+        {/* Intro Text */}
         <div className="flex-1 flex items-start justify-center pt-8 px-4">
           <div className="max-w-2xl animate-fade-in text-center">
             <span className="text-white minecraft-text text-lg font-bold">
@@ -88,7 +87,9 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
         {/* Terminal - only visible after intro text */}
         {showTerminal && (
           <div className="flex-1 flex items-center justify-center p-8">
-            <Terminal />
+            <div className="w-auto h-auto">
+              <Terminal />
+            </div>
           </div>
         )}
       </div>
