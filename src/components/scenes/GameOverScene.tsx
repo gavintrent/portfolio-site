@@ -57,8 +57,16 @@ export const GameOverScene: React.FC<GameOverSceneProps> = ({ onSceneChange }) =
 
   return (
     <>
-      {/* Black background */}
-      <div className="absolute inset-0 z-0 bg-black" />
+      {/* Background image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/pixel-art/night-scene-2.png"
+          alt="Night scene background"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
 
       {/* Game Content */}
       <div className="relative z-10 flex flex-col h-full">

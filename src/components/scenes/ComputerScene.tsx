@@ -59,12 +59,11 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
   return (
     <>
       {/* Background image for computer desktop */}
-      <div className="absolute inset-0 z-0 justify-center items-center">
+      <div className="absolute inset-0 z-0">
         <Image
-          src="/pixel-art/"
+          src="/pixel-art/blank-desk.png"
           alt="Computer scene"
-          width={1000}
-          height={1000}
+          fill
           className="object-cover"
           priority
         />
@@ -73,10 +72,12 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
       {/* Computer Scene Content */}
       <div className="relative z-10 flex flex-col h-full">
 
-        {/* Intro Text */}
+        {/* Intro Text - always rendered, just fades out */}
         <div className="flex-1 flex items-start justify-center pt-8 px-4">
           <div className="max-w-2xl animate-fade-in text-center">
-            <span className="text-white minecraft-text text-lg font-bold">
+            <span className={`text-white minecraft-text text-lg font-bold transition-opacity duration-1000 ${
+              showTerminal ? 'opacity-0' : 'opacity-100'
+            }`}>
               {displayText}
               {isTyping && <span className="animate-pulse">|</span>}
             </span>
@@ -84,10 +85,10 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
         </div>
         
 
-        {/* Terminal - only visible after intro text */}
+        {/* Terminal - positioned absolutely to avoid layout shifts */}
         {showTerminal && (
-          <div className="flex-1 flex items-center justify-center p-8">
-            <div className="w-auto h-auto">
+          <div className="absolute inset-0 flex items-start justify-center pt-10 animate-fade-in">
+            <div className="pt-14">
               <Terminal />
             </div>
           </div>

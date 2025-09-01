@@ -80,7 +80,7 @@ export const RoomScene: React.FC<RoomSceneProps> = ({ onSceneChange }) => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/pixel-art/main-room.png"
+          src="/pixel-art/room-pixelified.png"
           alt="Adventure scene"
           fill
           className="object-cover"
