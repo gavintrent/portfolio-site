@@ -16,7 +16,23 @@ export const Terminal: React.FC = () => {
     command: string;
     output: CommandOutput;
     timestamp: Date;
-  }>>([]);
+  }>>([{
+    command: 'help',
+    output: { 
+      type: 'list', 
+      content: [
+        'Available commands:',
+        '  help       - See a list of available commands',
+        '  clear      - Clear the terminal',
+        '  about      - Display info about me',
+        '  projects   - List available projects',
+        '  photography - Navigate to photo portfolio (coming soon)',
+        '  contact    - Show contact information'
+      ], 
+      command: 'help' 
+    },
+    timestamp: new Date()
+  }]);
   const [currentInput, setCurrentInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
@@ -32,15 +48,6 @@ export const Terminal: React.FC = () => {
   // Focus input on mount
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
-
-  // Show initial help message on mount
-  useEffect(() => {
-    setHistory([{
-      command: '',
-      output: { type: 'text', content: 'Type help for a list of available commands.', command: '' },
-      timestamp: new Date()
-    }]);
   }, []);
 
   // Cursor blinking effect
