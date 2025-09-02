@@ -55,9 +55,9 @@ export class CommandProcessor {
           `Navigated to ${project.title} project`,
           '',
           'Available commands:',
+          '  info    - Get project information and details',
           '  goto    - Open project link in browser (if deployed)',
           '  github  - Navigate to GitHub repository',
-          '  info    - Get project information and details',
           '  back    - Return to project list'
         ],
         command: cleanCommand 
@@ -173,9 +173,10 @@ export class CommandProcessor {
         };
 
       case 'photography':
+        window.open('https://www.instagram.com/gavin_trent_', '_blank');
         return {
           type: 'text',
-          content: 'Photography portfolio coming soon...',
+          content: 'Opening Instagram photography portfolio in new tab...\n\nIn-site portfolio coming soon!',
           command: cleanCommand
         };
 
@@ -188,6 +189,13 @@ export class CommandProcessor {
             `  GitHub: ${profile.contact.github}`,
             `  LinkedIn: ${profile.contact.linkedin}`
           ],
+          command: cleanCommand
+        };
+
+      case 'continue-game':
+        return {
+          type: 'text',
+          content: 'CONTINUE_GAME',
           command: cleanCommand
         };
 

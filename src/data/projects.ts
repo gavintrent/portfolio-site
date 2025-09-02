@@ -36,4 +36,13 @@ export const projects: Project[] = [
     featured: true,
     link: "https://github.com/gavintrent/amc-alist-mcp-server",
   },
+  {
+    id: "personal-site",
+    title: "My Personal Site (this one!)",
+    description: "My portfolio website, built with Next.js, TypeScript, and Tailwind CSS.",
+    technologies: ["TypeScript", "Next.js", "Tailwind CSS", "React", "JavaScript"],
+    github: "https://github.com/gavintrent/personal-site",
+    featured: true,
+    link: "https://github.com/gavintrent/personal-site",
+  }
 ];

@@ -58,10 +58,29 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
 
   return (
     <>
-      {/* Background image for computer desktop */}
+      {/* Animated background video */}
       <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          style={{ animationDuration: '20s' }}
+          ref={(video) => {
+            if (video) {
+              video.playbackRate = 0.4; // Half speed (0.5x)
+            }
+          }}
+        >
+          <source src="/dynamic/pixel_wall_spirals_balanced.webm" type="video/webm" />
+        </video>
+      </div>
+
+      {/* Background image for computer desktop */}
+      <div className="absolute inset-0 z-1">
         <Image
-          src="/pixel-art/blank-desk.png"
+          src="/pixel-art/blank-desk-2x.png"
           alt="Computer scene"
           fill
           className="object-cover"
