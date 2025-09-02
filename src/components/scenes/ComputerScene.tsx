@@ -77,7 +77,7 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
         </video>
       </div>
 
-      {/* Background image for computer desktop */}
+      {/* Background image for computer desktop with terminal positioned relative to it */}
       <div className="absolute inset-0 z-1">
         <Image
           src="/pixel-art/blank-desk-2x.png"
@@ -86,6 +86,19 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
           className="object-cover"
           priority
         />
+        
+        {/* Terminal positioned relative to the desk image */}
+        {showTerminal && (
+          <div className="absolute inset-0 flex items-center justify-center animate-fade-in" style={{ 
+            top: '-36%', 
+            left: '50%', 
+            transform: 'translateX(-50%)',
+            width: 'auto',
+            height: 'auto'
+          }}>
+            <Terminal />
+          </div>
+        )}
       </div>
 
       {/* Computer Scene Content */}
@@ -102,16 +115,6 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
             </span>
           </div>
         </div>
-        
-
-        {/* Terminal - positioned absolutely to avoid layout shifts */}
-        {showTerminal && (
-          <div className="absolute inset-0 flex items-start justify-center pt-10 animate-fade-in">
-            <div className="pt-14">
-              <Terminal />
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

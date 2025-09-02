@@ -34,6 +34,10 @@ export const TerminalContainer: React.FC<TerminalContainerProps> = ({
       <Image
         src="/pixel-art/terminal.jpg"
         alt="Terminal Container"
+        style={{
+          width: 'calc(35vw)',
+          height: 'calc(40vh)'
+        }}
         width={500}
         height={400}
         className=""
