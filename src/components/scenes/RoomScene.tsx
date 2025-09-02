@@ -89,17 +89,57 @@ export const RoomScene: React.FC<RoomSceneProps> = ({ onSceneChange }) => {
         
         {/* Computer screen glow effect */}
         <div className="absolute inset-0 z-10">
-          {/* Fixed pixel positioning for exact placement */}
-          <div className="absolute w-64 h-40 bg-blue-400/60 rounded-lg blur-xl slow-pulse" style={{ top: '380px', left: '450px' }}></div>
-          <div className="absolute w-64 h-40 bg-blue-300/70 rounded-lg blur-lg slow-pulse" style={{ top: '380px', left: '450px' }}></div>
-          <div className="absolute w-64 h-40 bg-blue-200/80 rounded-lg blur-md slow-pulse" style={{ top: '380px', left: '450px' }}></div>
+          {/* Responsive positioning with fine-tuned control */}
+          <div 
+            className="absolute bg-blue-400/60 rounded-lg blur-xl slow-pulse" 
+            style={{ 
+              top: 'calc(46vh)', 
+              left: 'calc(50vw - 19vw)',
+              width: 'calc(18vw)',
+              height: 'calc(20vh)'
+            }}
+          ></div>
+          <div 
+            className="absolute bg-blue-300/70 rounded-lg blur-lg slow-pulse" 
+            style={{ 
+              top: 'calc(46vh)', 
+              left: 'calc(50vw - 19vw)',
+              width: 'calc(18vw)',
+              height: 'calc(20vh)'
+            }}
+          ></div>
+          <div 
+            className="absolute bg-blue-200/80 rounded-lg blur-md slow-pulse" 
+            style={{ 
+              top: 'calc(46vh)', 
+              left: 'calc(50vw - 19vw)',
+              width: 'calc(18vw)',
+              height: 'calc(20vh)'
+            }}
+          ></div>
         </div>
 
         {/* Lamp glow effect */}
         <div className="absolute inset-0 z-10">
-          {/* Fixed pixel positioning for exact placement */}
-          <div className="absolute w-24 h-24 bg-yellow-400/60 rounded-lg blur-xl " style={{ top: '210px', left: '750px' }}></div>
-          <div className="absolute w-24 h-24 bg-yellow-200/80 rounded-lg blur-lg" style={{ top: '210px', left: '750px' }}></div>
+          {/* Responsive positioning with fine-tuned control */}
+          <div 
+            className="absolute bg-yellow-400/60 rounded-lg blur-xl" 
+            style={{ 
+              top: 'calc(50vh - 23vh)', 
+              left: 'calc(50vw + 3vw)',
+              width: 'calc(6vw)',
+              height: 'calc(6vw)'
+            }}
+          ></div>
+          <div 
+            className="absolute bg-yellow-200/80 rounded-lg blur-lg" 
+            style={{ 
+              top: 'calc(50vh - 23vh)', 
+              left: 'calc(50vw + 3vw)',
+              width: 'calc(6vw)',
+              height: 'calc(6vw)'
+            }}
+          ></div>
         </div>
       </div>
 
