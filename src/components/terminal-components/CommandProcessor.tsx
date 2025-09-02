@@ -105,6 +105,9 @@ export class CommandProcessor {
           return { type: 'text', content: 'GitHub repository not available', command: cleanCommand };
         }
       case 'info':
+        if (!this.currentProject) {
+          return { type: 'error', content: 'No project selected', command: cleanCommand };
+        }
         return { 
           type: 'text', 
           content: `${this.currentProject.title}${this.currentProject.featured ? ' ★' : ''}\n\n${this.currentProject.description}\n\nTech: ${this.currentProject.technologies.join(', ')}`, 
