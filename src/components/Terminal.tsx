@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import Image from 'next/image';
 import { TerminalContainer, CommandProcessor, type CommandOutput } from './terminal-components';
-import { SnakeGame } from './games';
 
-export const Terminal: React.FC = () => {
+
+interface TerminalProps {
+  onShowGameButtons?: (show: boolean) => void;
+}
+
+export const Terminal = forwardRef<any, TerminalProps>(({ onShowGameButtons }, ref) => {
   const [history, setHistory] = useState<Array<{
     command: string;
     output: CommandOutput;
@@ -30,12 +34,16 @@ export const Terminal: React.FC = () => {
   const [currentInput, setCurrentInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
-  const [showGameButtons, setShowGameButtons] = useState(false);
   const [isHacking, setIsHacking] = useState(false);
   const [hasMadeSelection, setHasMadeSelection] = useState(false);
-  const [showSnakeGame, setShowSnakeGame] = useState(false);
   const commandProcessor = useRef(new CommandProcessor());
   const historyEndRef = useRef<HTMLDivElement>(null);
+
+  // Expose handlers to parent component
+  useImperativeHandle(ref, () => ({
+    handleHackSystem,
+    handleOpenGame
+  }));
 
   // Auto-scroll to bottom when new commands are added
   useEffect(() => {
@@ -81,29 +89,29 @@ export const Terminal: React.FC = () => {
       return;
     }
 
-    // Handle special continue-game command
-    if (output.content === 'CONTINUE_GAME') {
-      if (hasMadeSelection) {
-        setHistory(prev => prev.map((entry, index) => 
-          index === prev.length - 1 
-            ? { ...entry, output: { type: 'error', content: 'Did you really think you could change your decision? There is no going back. Unless...', command: 'continue-game' } }
-            : entry
-        ));
-        setIsLoading(false);
-        
-        // Maintain input focus after failed continue-game
-        setTimeout(() => {
-          const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
-          if (inputElement) {
-            inputElement.focus();
-          }
-        }, 50);
-        return;
-      }
-      setShowGameButtons(true);
-      setIsLoading(false);
-      return;
-    }
+           // Handle special continue-game command
+       if (output.content === 'CONTINUE_GAME') {
+         if (hasMadeSelection) {
+           setHistory(prev => prev.map((entry, index) =>
+             index === prev.length - 1
+               ? { ...entry, output: { type: 'error', content: 'Did you really think you could change your decision? There is no going back. Unless...', command: 'continue-game' } }
+               : entry
+           ));
+           setIsLoading(false);
+
+           // Maintain input focus after failed continue-game
+           setTimeout(() => {
+             const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+             if (inputElement) {
+               inputElement.focus();
+             }
+           }, 50);
+           return;
+         }
+         onShowGameButtons?.(true);
+         setIsLoading(false);
+         return;
+       }
     
     // Update the entry with the output
     setHistory(prev => prev.map((entry, index) => 
@@ -124,11 +132,10 @@ export const Terminal: React.FC = () => {
   const handleClear = () => {
     // Clear everything - no initial help message
     setHistory([]);
-    setShowGameButtons(false);
     setIsHacking(false);
     setHasMadeSelection(false);
-    setShowSnakeGame(false);
     commandProcessor.current.setCurrentProject(null);
+    onShowGameButtons?.(false);
     
     // Maintain input focus after clearing
     setTimeout(() => {
@@ -141,7 +148,7 @@ export const Terminal: React.FC = () => {
 
   const handleHackSystem = () => {
     setIsHacking(true);
-    setShowGameButtons(false);
+    onShowGameButtons?.(false);
     setHasMadeSelection(true);
     
     // Add initial hack command to terminal
@@ -229,9 +236,8 @@ export const Terminal: React.FC = () => {
   };
 
   const handleOpenGame = () => {
-    setShowGameButtons(false);
+    onShowGameButtons?.(false);
     setHasMadeSelection(true);
-    setShowSnakeGame(true);
     
     // Add game launch message to terminal
     setHistory(prev => [...prev, {
@@ -245,28 +251,7 @@ export const Terminal: React.FC = () => {
     }]);
   };
 
-  const handleCloseGame = () => {
-    setShowSnakeGame(false);
-    
-    // Add game closed message to terminal
-    setHistory(prev => [...prev, {
-      command: 'close-game',
-      output: {
-        type: 'text',
-        content: 'Game closed. Terminal restored.',
-        command: 'close-game'
-      },
-      timestamp: new Date()
-    }]);
-    
-    // Restore input focus
-    setTimeout(() => {
-      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
-      if (inputElement) {
-        inputElement.focus();
-      }
-    }, 100);
-  };
+
 
   return (
     <>
@@ -282,50 +267,7 @@ export const Terminal: React.FC = () => {
       
 
       
-      {/* Game Buttons - only visible after continue-game command */}
-      {showGameButtons && (
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-fade-in">
-          <div className="flex gap-12">
-            <button
-              onClick={handleHackSystem}
-              className="relative hover:scale-105 transition-transform duration-200"
-              aria-label="Hack System"
-            >
-              <Image
-                src="/pixel-art/button-1.png"
-                alt="Hack System button"
-                width={200}
-                height={100}
-                className="cursor-pointer"
-              />
-              <span className="absolute inset-0 flex items-center justify-center pt-2 text-white minecraft-text text-lg font-bold">
-                Hack System
-              </span>
-            </button>
-            <button
-              onClick={handleOpenGame}
-              className="relative hover:scale-105 transition-transform duration-200"
-              aria-label="Open Game"
-            >
-              <Image
-                src="/pixel-art/button-1.png"
-                alt="Open Game button"
-                width={200}
-                height={100}
-                className="cursor-pointer"
-              />
-              <span className="absolute inset-0 flex items-center justify-center pt-2 text-white minecraft-text text-lg font-bold">
-                Open Game
-              </span>
-            </button>
-          </div>
-        </div>
-      )}
-      
-      {/* Snake Game Overlay */}
-      {showSnakeGame && (
-        <SnakeGame onClose={handleCloseGame} />
-      )}
+
     </>
   );
-};
+});

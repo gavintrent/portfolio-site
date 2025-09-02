@@ -11,7 +11,7 @@ interface SnakeGameProps {
   onClose: () => void;
 }
 
-export const SnakeGame: React.FC<SnakeGameProps> = ({ onClose }) => {
+const SnakeGame: React.FC<SnakeGameProps> = ({ onClose }) => {
   const [snake, setSnake] = useState<Position[]>([{ x: 10, y: 10 }]);
   const [food, setFood] = useState<Position>({ x: 15, y: 15 });
   const [direction, setDirection] = useState<Position>({ x: 1, y: 0 });
@@ -234,3 +234,5 @@ export const SnakeGame: React.FC<SnakeGameProps> = ({ onClose }) => {
     </div>
   );
 };
+
+export { SnakeGame };
