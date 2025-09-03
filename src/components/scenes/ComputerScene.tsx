@@ -73,6 +73,14 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
 
   const handleCloseGame = () => {
     setShowSnakeGame(false);
+    
+    // Restore input focus to terminal after closing game
+    setTimeout(() => {
+      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      if (inputElement) {
+        inputElement.focus();
+      }
+    }, 100);
   };
 
   const handleShowGameButtons = (show: boolean) => {
@@ -111,7 +119,7 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
         />
         
         {/* Terminal positioned relative to the desk image */}
-        {showTerminal && (
+        {showTerminal && !showSnakeGame && (
           <div className="absolute inset-0 flex items-center justify-center animate-fade-in" style={{ 
             top: '-36%', 
             left: '50%', 
@@ -124,6 +132,20 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
               ref={terminalRef}
               onShowGameButtons={handleShowGameButtons}
             />
+          </div>
+        )}
+
+        {/* Snake Game positioned relative to the desk image */}
+        {showSnakeGame && (
+          <div className="absolute inset-0 flex items-center justify-center animate-fade-in" style={{ 
+            top: '-36%', 
+            left: '50%', 
+            transform: 'translateX(-50%)',
+            width: 'auto',
+            height: 'auto',
+            pointerEvents: 'auto'
+          }}>
+            <SnakeGame onClose={handleCloseGame} />
           </div>
         )}
       </div>
@@ -184,10 +206,7 @@ export const ComputerScene: React.FC<ComputerSceneProps> = ({ onSceneChange }) =
         </div>
       )}
 
-      {/* Snake Game Overlay */}
-      {showSnakeGame && (
-        <SnakeGame onClose={handleCloseGame} />
-      )}
+
     </>
   );
 };

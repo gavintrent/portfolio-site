@@ -20,7 +20,6 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onClose }) => {
   const [isPaused, setIsPaused] = useState(false);
 
   const GRID_SIZE = 20;
-  const CELL_SIZE = 20;
 
   // Generate random food position
   const generateFood = useCallback((): Position => {
@@ -44,10 +43,18 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onClose }) => {
     return newFood;
   }, [generateFood, isSnakePosition]);
 
+  // Reset game
+  const resetGame = useCallback(() => {
+    setSnake([{ x: 10, y: 10 }]);
+    setFood(generateNewFood([{ x: 10, y: 10 }]));
+    setDirection({ x: 1, y: 0 });
+    setGameOver(false);
+    setScore(0);
+    setIsPaused(false);
+  }, [generateNewFood]);
+
   // Handle keyboard input
   const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    if (gameOver) return;
-
     switch (e.key.toLowerCase()) {
       case 'w':
       case 'arrowup':
@@ -71,14 +78,24 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onClose }) => {
         break;
       case ' ':
         e.preventDefault();
-        setIsPaused(prev => !prev);
+        if (gameOver) {
+          resetGame();
+        } else {
+          setIsPaused(prev => !prev);
+        }
         break;
       case 'escape':
         e.preventDefault();
         onClose();
         break;
+      case 'r':
+        e.preventDefault();
+        if (gameOver) {
+          resetGame();
+        }
+        break;
     }
-  }, [direction, gameOver, onClose]);
+  }, [direction, gameOver, onClose, resetGame]);
 
   // Game loop
   useEffect(() => {
@@ -128,109 +145,61 @@ const SnakeGame: React.FC<SnakeGameProps> = ({ onClose }) => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleKeyPress]);
 
-  // Reset game
-  const resetGame = () => {
-    setSnake([{ x: 10, y: 10 }]);
-    setFood(generateNewFood([{ x: 10, y: 10 }]));
-    setDirection({ x: 1, y: 0 });
-    setGameOver(false);
-    setScore(0);
-    setIsPaused(false);
-  };
+
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="bg-gray-900 border-2 border-green-500 rounded-lg p-6 max-w-2xl w-full mx-4">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-green-400 font-mono text-xl">🐍 ASCII Snake Game</h2>
-          <button
-            onClick={onClose}
-            className="text-red-400 hover:text-red-300 font-mono text-sm"
-          >
-            [ESC] Close
-          </button>
-        </div>
+    <div className=" border border-green-500 p-4">
+        {/* ASCII Game Board */}
+        <div className="text-green-400 text-sm leading-none" style={{ fontFamily: 'UnifontExMono, monospace' }}>
+          {Array.from({ length: GRID_SIZE }, (_, y) => {
+            return (
+              <div key={y} className="flex">
+                {Array.from({ length: GRID_SIZE }, (_, x) => {
+                  const isSnake = snake.some(segment => segment.x === x && segment.y === y);
+                  const isFood = food.x === x && food.y === y;
+                  const isHead = snake[0]?.x === x && snake[0]?.y === y;
 
-        {/* Game Info */}
-        <div className="flex justify-between items-center mb-4 text-green-300 font-mono text-sm">
-          <div>Score: {score}</div>
-          <div>{isPaused ? 'PAUSED' : gameOver ? 'GAME OVER' : 'PLAYING'}</div>
-        </div>
+                  let char = '·'; // Empty space
+                  if (isHead) char = '*'; // Snake head
+                  else if (isSnake) char = 'o'; // Snake body
+                  else if (isFood) char = '@'; // Food (apple)
 
-        {/* Game Board */}
-        <div className="bg-black border border-green-500 rounded p-2 mb-4">
-          <div 
-            className="grid gap-0"
-            style={{ 
-              gridTemplateColumns: `repeat(${GRID_SIZE}, ${CELL_SIZE}px)`,
-              gridTemplateRows: `repeat(${GRID_SIZE}, ${CELL_SIZE}px)`
-            }}
-          >
-            {Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, index) => {
-              const x = index % GRID_SIZE;
-              const y = Math.floor(index / GRID_SIZE);
-              const isSnake = snake.some(segment => segment.x === x && segment.y === y);
-              const isFood = food.x === x && food.y === y;
-              const isHead = snake[0]?.x === x && snake[0]?.y === y;
-
-              return (
-                <div
-                  key={index}
-                  className={`w-5 h-5 flex items-center justify-center text-xs font-mono ${
-                    isHead ? 'text-yellow-400' :
-                    isSnake ? 'text-green-400' :
-                    isFood ? 'text-red-400' :
-                    'text-gray-800'
-                  }`}
-                >
-                  {isHead ? '●' : isSnake ? '○' : isFood ? '◆' : ''}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Controls */}
-        <div className="text-green-300 font-mono text-sm mb-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <div className="text-green-400 mb-1">Controls:</div>
-              <div>WASD or Arrow Keys - Move</div>
-              <div>Space - Pause/Resume</div>
-              <div>ESC - Close Game</div>
-            </div>
-            <div>
-              <div className="text-green-400 mb-1">Legend:</div>
-              <div>● Snake Head</div>
-              <div>○ Snake Body</div>
-              <div>◆ Food</div>
-            </div>
-          </div>
+                  return (
+                    <span 
+                      key={x} 
+                      className="flex items-center justify-center"
+                      style={{ 
+                        width: 'min(1.5vw, 1.5vh, 20px)', 
+                        height: 'min(1.5vw, 1.5vh, 20px)',
+                        fontSize: 'min(1.2vw, 1.2vh, 16px)'
+                      }}
+                    >
+                      {char}
+                    </span>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
 
         {/* Game Over Screen */}
         {gameOver && (
-          <div className="text-center">
-            <div className="text-red-400 font-mono text-lg mb-4">GAME OVER!</div>
-            <div className="text-green-300 font-mono mb-4">Final Score: {score}</div>
-            <button
-              onClick={resetGame}
-              className="bg-green-600 hover:bg-green-700 text-white font-mono px-4 py-2 rounded"
-            >
-              Play Again
-            </button>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-green-400" style={{ fontFamily: 'UnifontExMono, monospace' }}>
+              <div className="text-lg mb-2">GAME OVER</div>
+              <div className="text-sm mb-2">Score: {score}</div>
+              <div className="text-xs">Press SPACE or R to restart</div>
+            </div>
           </div>
         )}
 
         {/* Pause Screen */}
         {isPaused && !gameOver && (
-          <div className="text-center">
-            <div className="text-yellow-400 font-mono text-lg mb-4">PAUSED</div>
-            <div className="text-green-300 font-mono">Press SPACE to resume</div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-green-400 text-lg" style={{ fontFamily: 'UnifontExMono, monospace' }}>PAUSED</div>
           </div>
         )}
-      </div>
     </div>
   );
 };
