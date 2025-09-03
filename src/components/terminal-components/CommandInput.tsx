@@ -20,20 +20,56 @@ export const CommandInput: React.FC<CommandInputProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // Focus the input when component mounts
+    const focusInput = () => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+
+    // Try to focus immediately
+    focusInput();
+
+    // Also try after a short delay to handle timing issues
+    const timeoutId = setTimeout(focusInput, 100);
+    
+    // Try again after a longer delay for production environments
+    const timeoutId2 = setTimeout(focusInput, 500);
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(timeoutId2);
+    };
+  }, []);
+
+  // Additional focus effect when not loading
+  useEffect(() => {
+    if (!isLoading && inputRef.current) {
+      const timeoutId = setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 50);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isLoading]);
+
+  const handleInputClick = () => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, []);
+  };
 
   return (
-    <form onSubmit={onSubmit} className="flex items-center w-full relative">
+    <form onSubmit={onSubmit} className="flex items-center w-full relative" onClick={handleInputClick}>
       <span className="text-green-500 mr-2 text-xs flex items-center h-5" style={{ paddingTop: '0.375rem', paddingBottom: '0.375rem' }}>$</span>
       <input
         ref={inputRef}
         type="text"
         value={currentInput}
         onChange={(e) => onInputChange(e.target.value)}
-        className="flex-1 bg-transparent text-green-400 outline-none border-none text-xs min-w-0 w-full h-5 leading-none pr-6"
+        onClick={handleInputClick}
+        className="flex-1 bg-transparent text-green-400 outline-none border-none text-xs min-w-0 w-full h-5 leading-none pr-6 cursor-text"
         placeholder=""
         disabled={isLoading}
         aria-label="Terminal command input"

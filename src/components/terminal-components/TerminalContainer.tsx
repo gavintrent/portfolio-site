@@ -29,7 +29,7 @@ export const TerminalContainer: React.FC<TerminalContainerProps> = ({
   historyEndRef
 }) => {
   return (
-    <div className="relative inline-block bg-black">
+    <div className="relative inline-block bg-black terminal-container">
       {/* Terminal container image */}
       <Image
         src="/pixel-art/terminal.jpg"

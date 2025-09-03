@@ -58,6 +58,22 @@ export const Terminal = forwardRef<any, TerminalProps>(({ onShowGameButtons }, r
     return () => clearInterval(cursorInterval);
   }, []);
 
+  // Global click handler to focus input when clicking anywhere in terminal
+  useEffect(() => {
+    const handleTerminalClick = () => {
+      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      if (inputElement && !isLoading) {
+        inputElement.focus();
+      }
+    };
+
+    const terminalContainer = document.querySelector('.terminal-container');
+    if (terminalContainer) {
+      terminalContainer.addEventListener('click', handleTerminalClick);
+      return () => terminalContainer.removeEventListener('click', handleTerminalClick);
+    }
+  }, [isLoading]);
+
   const handleCommandSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
