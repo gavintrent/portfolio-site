@@ -24,7 +24,7 @@ export const Terminal = forwardRef<any, TerminalProps>(({ onShowGameButtons }, r
         '  clear      - Clear the terminal',
         '  about      - Display info about me',
         '  projects   - List available projects',
-        '  photography - Navigate to photo portfolio (coming soon)',
+        '  photography - Navigate to photo portfolio',
         '  contact    - Show contact information'
       ], 
       command: 'help' 
@@ -135,6 +135,7 @@ export const Terminal = forwardRef<any, TerminalProps>(({ onShowGameButtons }, r
     setIsHacking(false);
     setHasMadeSelection(false);
     commandProcessor.current.setCurrentProject(null);
+    commandProcessor.current.setInTopSecret(false);
     onShowGameButtons?.(false);
     
     // Maintain input focus after clearing
@@ -202,21 +203,22 @@ export const Terminal = forwardRef<any, TerminalProps>(({ onShowGameButtons }, r
                   type: 'list',
                   content: [
                     'Access granted to: /top-secret/',
-                    '',
+                    ' ',
                     'Available files:',
                     '  secret-recipe.txt',
-                    '  embarrassing-photos/',
-                    '  todo-list.txt',
-                    '  cat-videos/',
+                    '  instant-ramen-tierlist.txt',
                     '  backup-passwords.txt',
-                    '',
-                    'Type `cd [file-or-folder-name]` to explore a file or folder.'
+                    '  sensitive-images/',
+                    ' ',
+                    'Type [file-or-folder-name] to explore a file or folder.',
+                    'Type `help` to see a list of available commands.'
                   ],
                   command: 'ls -la /top-secret/'
                 },
                 timestamp: new Date()
               }]);
               setIsHacking(false);
+              commandProcessor.current.setInTopSecret(true);
               
               // Maintain input focus after hack completes
               setTimeout(() => {
